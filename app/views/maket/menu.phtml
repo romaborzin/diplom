@@ -1,0 +1,111 @@
+<div class="modal fade" id="signIn">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+    <h4 class="modal-title">Вход</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+    <?echo Phalcon\Tag::form(
+        [
+            "session",
+            "method" => "post",
+            "class"=>"form-horizontal",
+        ]
+    );?>
+      <div class="form-group">
+      <label for="exampleInputEmail1">Почта</label>
+      <input type="email" name="email" class="form-control" id="exampleInputEmail1">
+      </div>
+      <div class="form-group">
+      <label for="exampleInputPassword1">Пароль</label>
+      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+      </div>
+      <div class="form-group">
+      <div class="main-checkbox">
+      <input value="None" id="checkbox1" name="check"А type="checkbox">
+      <label for="checkbox1">Запомнить меня</label>
+      </div>
+      </div>
+      <div class="form-group">
+      <button type="submit" style="width:100%" class="btn btn-outline-primary">Войти</button>
+      </div>
+    </form>
+        
+      </div>
+    </div><!-- /.модальное окно-Содержание -->  
+  </div><!-- /.модальное окно-диалог -->  
+</div>
+
+<nav class="navbar navbar-expand-md bg-succes navbar-dark bg-gradient">
+              <?
+                echo Phalcon\Tag::linkTo(
+                    [
+                        "",
+                        '<i class="fa d-inline fa-lg fa-circle"></i><b> CONFERENCE</b>',
+                        "class" => "navbar-brand",
+                    ]
+                );
+              ?>
+    <div class="container"> 
+      <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar12">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar12">
+      
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active"> 
+            <?
+                echo Phalcon\Tag::linkTo(
+                    [
+                        "conference/",
+                        'Конференции',
+                        "class" => "btn navbar-btn  text-light",
+                    ]
+                );
+              ?>
+           </li>
+           <li class="nav-item active"> 
+            <?
+                echo Phalcon\Tag::linkTo(
+                    [
+                        "talks/",
+                        'Переговоры',
+                        "class" => "btn navbar-btn  text-light",
+                    ]
+                );
+              ?>
+           </li>
+           <li class="nav-item active"> 
+        <?
+                echo Phalcon\Tag::linkTo(
+                    [
+                        "statistic/",
+                        'Статистика',
+                        "class" => "btn navbar-btn  text-light",
+                    ]
+                );
+              ?>
+           </li>
+    </ul>
+          
+        
+       
+        <a class="btn navbar-btn m-2 text-white btn-dark" data-toggle="modal" data-target="#signIn">
+                            Войти</a>
+        
+   
+      </div></div>
+        
+   
+   
+
+    
+
+  </nav>
+  
+
+  
+  

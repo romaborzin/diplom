@@ -1,0 +1,89 @@
+<div class="py-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="h1 text-center">Переговоры</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="py-5" >
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group">
+             <?
+            echo $this->tag->linkTo( 
+                [
+                  "",
+                  '<i class="fa fa-plus text-primary mr-2" aria-hidden="true"></i> Создание комнаты',
+                  'class' => 'list-group-item list-group-item-action',
+                  'data-toggle' => 'modal',
+                  'data-target' => '#createConference'
+                ]
+              );
+            ?>
+            <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-search text-primary mr-2" aria-hidden="true"></i> Поиск комнаты</a>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group</h5> <small>3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small>Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group </h5> <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group </h5> <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="createConference">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Создать комнату</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?echo Phalcon\Tag::form(
+            [
+                "conference/create",
+                "method" => "post",
+                "class"=>"form-horizontal",
+            ]
+        );?>
+        <div class="form-group">
+          <label for="nameInput">Наименование</label>
+          <input type="text" name="name" class="form-control" id="nameInput">
+        </div>
+        <div class="form-group">
+          <label for="descriptionInput">Описание</label>
+          <textarea type="text" name="description" class="form-control" id="descriptionInput"></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit" style="width:100%" class="btn btn-outline-primary">Создать курс</button>
+        </div>
+        </form>
+      </div>
+    </div><!-- /.модальное окно-Содержание -->
+  </div><!-- /.модальное окно-диалог -->
+</div>
