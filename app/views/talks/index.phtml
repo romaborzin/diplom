@@ -21,40 +21,47 @@
                   '<i class="fa fa-plus text-primary mr-2" aria-hidden="true"></i> Создание комнаты',
                   'class' => 'list-group-item list-group-item-action',
                   'data-toggle' => 'modal',
-                  'data-target' => '#createConference'
+                  'data-target' => '#createTalks'
                 ]
               );
             ?>
-            <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-search text-primary mr-2" aria-hidden="true"></i> Поиск комнаты</a>
+            <?
+            echo $this->tag->linkTo( 
+                [
+                  "talks/search",
+                  '<i class="fa fa-search text-primary mr-2" aria-hidden="true"></i> Поиск комнаты',
+                  'class' => 'list-group-item list-group-item-action',
+                ]
+              );
+            ?>
           </div>
         </div>
         <div class="col-md-9">
           <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">List group</h5> <small>3 days ago</small>
+            <?php 
+              
+                  foreach ($page->items as $item)
+                  { 
+            echo $this->tag->linkTo( 
+              [
+                "room/index/".$item->room_id,
+                " <div class='d-flex w-100 justify-content-between'>
+                <h5 class='mb-1'>".$item->name."</h5>
+                <smal>".$item->date_time."</smal>
               </div>
-              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small>Donec id elit non mi porta.</small>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">List group </h5> <small class="text-muted">3 days ago</small>
-              </div>
-              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small class="text-muted">Donec id elit non mi porta.</small>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">List group </h5> <small class="text-muted">3 days ago</small>
-              </div>
-              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> <small class="text-muted">Donec id elit non mi porta.</small>
-            </a>
+              <div class='d-flex w-100 justify-content-between'>
+                <p class='mb-1'>".$item->description."</p>
+              </div>",
+              "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
+            ]
+            );} ?>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-   <div class="modal fade" id="createConference">
+   <div class="modal fade" id="createTalks">
   <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,9 +71,13 @@
         </button>
       </div>
       <div class="modal-body">
+        <?php 
+            $role=$this->session->auth['role'];
+            if($role != 'guest' && $role != null){
+              ?>
         <?echo Phalcon\Tag::form(
             [
-                "conference/create",
+                "talks/create",
                 "method" => "post",
                 "class"=>"form-horizontal",
             ]
@@ -83,6 +94,9 @@
           <button type="submit" style="width:100%" class="btn btn-outline-primary">Создать курс</button>
         </div>
         </form>
+        <? }else{?>
+    <h5>Авторизируйтесь для создания комнаты</h5>
+    <?}?>
       </div>
     </div><!-- /.модальное окно-Содержание -->
   </div><!-- /.модальное окно-диалог -->

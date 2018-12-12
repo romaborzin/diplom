@@ -1,0 +1,76 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header m-1 w-100" style="text-align: center;">
+    <h1>
+        Регистрация
+    </h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "user/create",
+            "autocomplete" => "off",
+            "class" => "form-horizontal",
+            
+        ]
+    );
+?>
+
+
+<div class="form-group">
+    <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+    
+    <div>
+        <p>Email</p>
+        <?php echo $this->tag->textField(["email", "size" => 30, "class" => "form-control my-2", "id" => "fieldEmail"]) ?>
+    </div>
+
+    <div>
+        <p>Пароль</p>
+        <?php echo $this->tag->textField(["pass", "size" => 30, "class" => "form-control my-2", "id" => "fieldPass"]) ?>
+    </div>
+
+    <div >
+        <p>Имя</p>
+        <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control my-2", "id" => "fieldName"]) ?>
+    </div>
+    
+    <div >
+        <p>Фамилия</p>
+        <?php echo $this->tag->textField(["second_name", "size" => 30, "class" => "form-control my-2", "id" => "fieldSecondName"]) ?>
+    </div>
+
+    <div class="my-2">
+        <?php echo $this->tag->submitButton(["Зарегистрироваться", "class" => "btn btn-success"]) ?>
+        <?php echo $this->tag->linkTo(["", "Назад", "class" => "btn btn-danger mr-auto"]) ?>
+    </div>
+</div>
+<div class="col">
+</div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>
+</div>
+
+
+<div id="myModal" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+<h4 class="modal-title">Заголовок окна</h4>
+</div>
+<div class="modal-body">Текст уведомления</div>
+<div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Закрыть</button></div>
+</div>
+</div>
+</div>

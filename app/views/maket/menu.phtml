@@ -8,6 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
+        
     <?echo Phalcon\Tag::form(
         [
             "session",
@@ -33,13 +34,20 @@
       <button type="submit" style="width:100%" class="btn btn-outline-primary">Войти</button>
       </div>
     </form>
-        
+    <div class="form-group">
+       <a href="/diplom/user/new" style="width:100%" class="btn btn-outline-primary">Регистрация</a>
+      </div>
+        <?
+          if($error != null) {
+           $this->flash->danger($error);
+          }
+        ?>
       </div>
     </div><!-- /.модальное окно-Содержание -->  
   </div><!-- /.модальное окно-диалог -->  
 </div>
 
-<nav class="navbar navbar-expand-md bg-succes navbar-dark bg-gradient">
+<nav class="navbar navbar-expand-md bg-dark navbar-dark bg-gradient">
               <?
                 echo Phalcon\Tag::linkTo(
                     [
@@ -54,8 +62,11 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar12">
-      
+       
         <ul class="navbar-nav mr-auto">
+          <?
+           if($this->session->auth['role']!='guest' && $this->session->auth['role']!=null){
+          ?>
           <li class="nav-item active"> 
             <?
                 echo Phalcon\Tag::linkTo(
@@ -89,15 +100,44 @@
                 );
               ?>
            </li>
+        
+          <li class="nav-item active"> 
+            <?
+                        echo Phalcon\Tag::linkTo(
+                            [
+                                "/user/settings",
+                                "Настройки",
+                                "class" => "btn navbar-btn  text-light",
+                            ]
+                        );
+                      ?>
+        </li>
+        <?php
+        }?>
     </ul>
           
         
-       
-        <a class="btn navbar-btn m-2 text-white btn-dark" data-toggle="modal" data-target="#signIn">
-                            Войти</a>
-        
+      
+       <?php
+         if($this->session->auth['role']!='guest' && $this->session->auth['role']!=null){
+                $name = $this->session->get('auth')['name'];
+                $second_name = $this->session->get('auth')['second_name'];
+                        echo Phalcon\Tag::linkTo(
+                            [
+                                "/session/logout",
+                                "Выйти",
+                                "class" => "btn navbar-btn m-2 text-white btn-dark",
+                            ]
+                        );
+                      ?>
+        <span class="navbar-text text-light"><? echo $name." ".$second_name; ?></span>
+        <?php
+        } else {
+        ?>
+        <a class="btn navbar-btn m-2 text-white btn-dark" data-toggle="modal" data-target="#signIn">Войти</a>
+      <?php }?>
    
-      </div></div>
+    </div></div>
         
    
    

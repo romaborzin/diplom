@@ -11,7 +11,8 @@ class SessionController extends \Phalcon\Mvc\Controller
             [
                 'id'   => $user->user_id,
                 'email' => $user->email,
-                'login' => $user->login,
+                'name' => $user->name,
+                'second_name' => $user->second_name,
                 'role' => 'admin',
             ]
         );
@@ -22,7 +23,7 @@ class SessionController extends \Phalcon\Mvc\Controller
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(
                 [
-                    'controller' => 'test',
+                    'controller' => 'index',
                     'action'     => 'index',
                     'params' => [error=>'Пожалйста, не хакайте нас. Оч просим.'],
                 ]
@@ -48,7 +49,7 @@ class SessionController extends \Phalcon\Mvc\Controller
             $this->_registerSession($user);
             return $this->dispatcher->forward(
                 [
-                    'controller' => 'test',
+                    'controller' => 'index',
                     'action'     => 'index',
                 ]
             );
@@ -56,9 +57,9 @@ class SessionController extends \Phalcon\Mvc\Controller
 
         return $this->dispatcher->forward(
             [
-                'controller' => 'test',
+                'controller' => 'index',
                 'action'     => 'index',
-                'params' => [error=>'error '.$user->email.' | '.$this->security->checkHash($user->pass, $password).' | '.$password],
+                'params' => [error=>'Неверный логин и/или пароль'],
             ]
         );
     }

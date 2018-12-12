@@ -76,13 +76,16 @@ class SecurityPlugin extends Plugin
 		    
 		    'session'    => ['index','logout'],
 		    'conference'    => ['create'],
-		   
+		    'user'    => ['settings','delete'],
+		    'room'	=> ['edit'],
+
 		];
 		$adminResources = [
 		    
 		    'session'    => ['index','logout'],
 		    'conference'    => ['create'],
 		    'user'    => ['index','edit','create','search','new','save','delete'],
+		    'room'	=> ['edit'],
 		   
 		];
 
@@ -100,7 +103,7 @@ class SecurityPlugin extends Plugin
 		    'conference' => ['index'],
 		    'talks'    => ['index'],
 		    'statistic'    => ['index'],
-		    'user'    => ['index','edit','create','search','new','save','delete'],
+		    'user'    => ['index','create','search','new','save'],
 
 		];
 

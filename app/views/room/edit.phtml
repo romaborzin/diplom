@@ -1,0 +1,57 @@
+<div class="py-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="h1 text-center">Настройки комнаты</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--//форма изменения пароля-->
+<div class="py-5" >
+    <div class="container">
+        <?php echo $this->getContent(); ?>
+      <div class="row">
+<?php
+    echo $this->tag->form(
+        [
+            "room/save",
+            "autocomplete" => "off",
+            "class" => "form-horizontal w-100",
+        ]
+    );
+?>
+    
+    <div class="form-group">
+        <label for="fieldName" class="control-label">Название</label>
+        <div>
+            <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control", "id" => "fieldName"]) ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="fieldDescription" class="control-label">Описание</label>
+        <div>
+            <?php echo $this->tag->textArea(["description",  "size" => 30, "class" => "form-control", "rows" => 4, "id" => "fieldDescription"]) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <?php echo $this->tag->submitButton(["Сохранить", "class" => "btn btn-success"]) ?>
+        </div>
+    </div>
+    <?php echo $this->tag->endForm(); 
+
+    echo Phalcon\Tag::linkTo(
+                    [
+                        "room/speacker",
+                        'Список выступающих',
+                        "class" => "btn btn-primary",
+                    ]
+                );?>
+
+
+</div>
+</div>
+</div>
