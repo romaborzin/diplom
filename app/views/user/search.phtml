@@ -6,48 +6,81 @@
         </div>
       </div>
     </div>
-  </div>
-<div class="py-5" >
+</div>
+<div>
     <div class="container">
-        <?php echo $this->getContent(); ?>
       <div class="row">
+        <?php echo $this->getContent(); ?>
+        <div class="col-md-12">
+        <?php
+            echo $this->tag->form(
+                [
+                    "user/search",
+                    "autocomplete" => "off",
+                    "class" => "form-horizontal"
+                ]
+            );
+        ?>
+            <div class="form-group">
+                <label for="fieldEmail" class="control-label">Email</label>
+                <div >
+                    <?php echo $this->tag->textField(["email", "size" => 30, "class" => "form-control", "id" => "fieldEmail"]) ?>
+                </div>
+            </div>
 
-<?php
-    echo $this->tag->form(
-        [
-            "user/search",
-            "autocomplete" => "off",
-            "class" => "form-horizontal"
-        ]
-    );
-?>
-<div class="form-group">
-    <label for="fieldEmail" class="control-label">Email</label>
-    <div >
-        <?php echo $this->tag->textField(["email", "size" => 30, "class" => "form-control", "id" => "fieldEmail"]) ?>
-    </div>
+            <div class="form-group">
+                <label for="fieldName" class="control-label">Имя</label>
+                <div>
+                    <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control", "id" => "fieldName"]) ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fieldSecondName" class="control-label">Фамилия</label>
+                <div>
+                    <?php echo $this->tag->textField(["second_name", "size" => 30, "class" => "form-control", "id" => "fieldSecondName"]) ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <?php echo $this->tag->submitButton(["Поиск", "class" => "btn btn-default"]) ?>
+                </div>
+            </div>
+        <?php echo $this->tag->endForm(); ?>
+        </div>
+    
+<div class="col-md-12">
+
+<div class="page-header">
+    <h1>Результаты поиска</h1>
 </div>
 
-<div class="form-group">
-    <label for="fieldName" class="control-label">Имя</label>
-    <div>
-        <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control", "id" => "fieldName"]) ?>
-    </div>
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+            <th>Email</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $user): ?>
+            <tr>
+            <td><?php echo $user->email ?></td>
+            <td><?php echo $user->second_name ?></td>
+            <td><?php echo $user->name ?></td>
+            <td><?php echo $this->tag->linkTo(["room/add/" . $user->user_id."/".$room->room_id, "Добавить"]); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
-
-<div class="form-group">
-    <label for="fieldSecondName" class="control-label">Фамилия</label>
-    <div>
-        <?php echo $this->tag->textField(["second_name", "size" => 30, "class" => "form-control", "id" => "fieldSecondName"]) ?>
-    </div>
 </div>
-
-
-<div class="form-group">
-    <div>
-        <?php echo $this->tag->submitButton(["Поиск", "class" => "btn btn-default"]) ?>
-    </div>
 </div>
-
-<?php echo $this->tag->endForm(); ?>
-</div></div></div>
+</div>
+</div>

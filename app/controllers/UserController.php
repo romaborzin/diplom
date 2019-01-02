@@ -5,21 +5,19 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Criteria;
 
 
-class UserController extends ControllerBase
+class UserController extends \Phalcon\Mvc\Controller
 {
     /**
      * Index action
      */
     public function indexAction()
     {
-        $this->persistent->parameters = null;
-        $this->view->groups = Group::find();
     }
 
     /**
      * Searches for user
      */
-    public function searchAction()
+    public function searchAction($room_id=0)
     {
         $numberPage = 1;
         if ($this->request->isPost()) {
@@ -54,6 +52,7 @@ class UserController extends ControllerBase
         ]);
 
         $this->view->page = $paginator->getPaginate();
+        $this->view->room_id = $room_id;
     }
     
     

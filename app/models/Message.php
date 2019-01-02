@@ -34,12 +34,20 @@ class Message extends \Phalcon\Mvc\Model
         $this->setSource("message");
         $this->hasManyToMany(
             'message_id',
-            'Message',
-            'message_message_id', 'room_room_id', 
             'RoomHasMessage',
+            'message_message_id', 'room_room_id', 
+            'Message',
             'room_id'
+            
         );
-        
+         $this->hasManyToMany(
+            'message_id',
+            'RoomHasMessage',
+            'message_message_id', 'room_room_id', 
+            'User',
+            'user_id'
+            
+        );
         $this->belongsTo('room_room_id', 'Room', 'room_id', ['alias' => 'Room']);
         $this->belongsTo('user_id', 'User', 'user_id', ['alias' => 'User']);
     }

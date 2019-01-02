@@ -69,31 +69,5 @@ class TalksController extends \Phalcon\Mvc\Controller
         }
 	}
 
-	public function saveAction($user_id=0)
-    {
-        if (!$this->request->isPost()) {
-            $auth = $this->session->auth;
-            
-            
-                $room = Room::findFirstByuser_id($auth['id']);
-            
-            if (!$user) {
-                $this->flash->error("Пользователь не найден");
-
-                $this->dispatcher->forward([
-                    'controller' => "user",
-                    'action' => 'index'
-                ]);
-
-                return;
-            }
-
-            $this->view->user_id = $user->user_id;
-            $this->tag->setDefault("user_id", $user->user_id);
-            $this->tag->setDefault("email", $user->email);
-            $this->tag->setDefault("name", $user->name);
-            $this->tag->setDefault("second_name", $user->second_name);
-            
-        }
-    }
+	
 }
