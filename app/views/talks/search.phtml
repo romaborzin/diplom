@@ -2,7 +2,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1 class="h1 text-center">Поиск конференции</h1>
+          <h1 class="h1 text-center">Поиск переговоров</h1>
         </div>
       </div>
     </div>
@@ -15,7 +15,7 @@
         <?php
             echo $this->tag->form(
                 [
-                    "conference/search",
+                    "talks/search",
                     "autocomplete" => "off",
                     "class" => "form-horizontal"
                 ]
@@ -39,7 +39,7 @@
             <?php echo $this->tag->hiddenField(
                 [
                     "type", 
-                    "value" => "conference",
+                    "value" => "talks",
                 ]
             )?>
             </div>

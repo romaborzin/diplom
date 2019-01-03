@@ -1,6 +1,7 @@
 <?php
 
-
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 
 class TalksController extends \Phalcon\Mvc\Controller
@@ -68,6 +69,48 @@ class TalksController extends \Phalcon\Mvc\Controller
             }
         }
 	}
+
+    public function searchAction()
+    {
+     
+         $numberPage = 1;
+        if ($this->request->isPost()) {
+            $query = Criteria::fromInput($this->di, 'Room', $_POST);
+            $this->persistent->parameters = $query->getParams();
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+
+        $parameters = $this->persistent->parameters;
+        if (!is_array($parameters)) {
+            $parameters = [];
+        }
+        $parameters["order"] = "room_id";
+
+        $room = Room::find($parameters);
+        if (count($room) == 0) {
+            $this->flash->notice("По результатам поиска, комната не найдена");
+
+            $this->dispatcher->forward([
+                "controller" => "room",
+                "action" => "index"
+            ]);
+
+            return;
+        }
+
+        $paginator = new Paginator([
+            'data' => $room,
+            'limit'=> 10,
+            'page' => $numberPage
+        ]);
+        if(!$room){
+            $this->flash->notice("По результатам поиска, комната не найдена");
+        }
+
+        $this->view->page = $paginator->getPaginate();
+        $this->view->room = $room;
+    }
 
 	
 }

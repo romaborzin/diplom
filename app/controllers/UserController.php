@@ -17,8 +17,21 @@ class UserController extends \Phalcon\Mvc\Controller
     /**
      * Searches for user
      */
-    public function searchAction($room_id=0)
+    public function searchAction($room_id = null)
     {
+     if (!$this->request->isPost()) {
+            
+            
+                $room = Room::findFirstByroom_id($room_id);
+            
+            if (!$room) {
+                $this->flash->error("Комната не найдена");
+                return;
+            }
+        }
+        
+        
+   
         $numberPage = 1;
         if ($this->request->isPost()) {
             $query = Criteria::fromInput($this->di, 'User', $_POST);
@@ -50,9 +63,13 @@ class UserController extends \Phalcon\Mvc\Controller
             'limit'=> 10,
             'page' => $numberPage
         ]);
+        if(!$room){
+            $this->flash->notice("По результатам поиска, комната не найдена");
+        }
 
+        $this->tag->setDefault("room_id", $room->room_id);
         $this->view->page = $paginator->getPaginate();
-        $this->view->room_id = $room_id;
+        $this->view->room = $room;
     }
     
     
@@ -270,9 +287,17 @@ class UserController extends \Phalcon\Mvc\Controller
      *
      * @param string $user_id
      */
-    public function deleteAction($user_id)
+    public function deleteAction($room_id, $user_id)
     {
-        $user = User::findFirstByuser_id($user_id);
+       $user = UserHasRoom::findFirst([
+                'columns'    => '*',
+                'conditions' => 'user_user_id = ?1 AND room_room_id = ?2',
+                'bind'       => [
+                    1 => $user_id,
+                    2 => $room_id,
+                ]
+            ]
+        );
         if (!$user) {
             $this->flash->error("Пользователь не найден");
 
@@ -300,9 +325,6 @@ class UserController extends \Phalcon\Mvc\Controller
 
         $this->flash->success("Пользователь успешно удален");
 
-        $this->dispatcher->forward([
-            'controller' => "user",
-            'action' => "index"
-        ]);
+       
     }
 }

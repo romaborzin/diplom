@@ -114,43 +114,30 @@ class RoomController extends \Phalcon\Mvc\Controller
     }
      public function speakerAction($room_id=0)
     {
-        $numberPage = 1;
+        if (!$this->request->isPost()) {
+            
+            
+                $room = Room::findFirstByroom_id($room_id);
+            
+            if (!$room) {
+                $this->flash->error("Комната не найдена");
+                return;
+            }
+            
+        }
+        $this->view->room = $room;
         
-        $room = Room::findFirst($room_id);
-        $numberPage = $this->request->getQuery("page", "int");
-        $role='speaker';
-        $speaker = UserHasRoom::findFirst([
-                'columns'    => '*',
-                'conditions' => 'role = ?1 AND room_room_id = ?2',
-                'bind'       => [
-                    1 => $role,
-                    2 => $room_id,
-                ]
-            ]
-        );
-        if(!$speacker){
-
-        }
-        else{
-             $paginator = new Paginator([
-            'data' => $user,
-            'limit'=> 10,
-            'page' => $numberPage
-        ]);
-
-        $this->view->page = $paginator->getPaginate(); 
-        $this->view->room = $room; 
-        }
     }
 
     public function addAction($user_id=0, $room_id=0)
     {
         $user_room = UserHasRoom::findFirst([
                 'columns'    => '*',
-                'conditions' => 'user_user_id = ?1 AND room_room_id = ?2',
+                'conditions' => 'user_user_id = ?1 AND room_room_id = ?2 AND role = ?3',
                 'bind'       => [
                     1 => $user_id,
                     2 => $room_id,
+                    3 => 'speaker',
                 ]
             ]
         );
@@ -169,7 +156,8 @@ class RoomController extends \Phalcon\Mvc\Controller
 
         }else
         $this->flash->success('Выступающий добавлен');
-    }
+    }else
+    $this->flash->success('Пользователь уже является выступающим');
     }
     
 }

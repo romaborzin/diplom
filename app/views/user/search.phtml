@@ -15,7 +15,7 @@
         <?php
             echo $this->tag->form(
                 [
-                    "user/search",
+                    "user/search/".$room->room_id,
                     "autocomplete" => "off",
                     "class" => "form-horizontal"
                 ]
@@ -41,7 +41,7 @@
                     <?php echo $this->tag->textField(["second_name", "size" => 30, "class" => "form-control", "id" => "fieldSecondName"]) ?>
                 </div>
             </div>
-
+            <?php echo $this->tag->hiddenField("room_id") ?>
             <div class="form-group">
                 <div>
                     <?php echo $this->tag->submitButton(["Поиск", "class" => "btn btn-default"]) ?>

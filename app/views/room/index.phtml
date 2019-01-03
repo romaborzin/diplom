@@ -64,7 +64,7 @@
             
               <? 
 
-              foreach ($room->getUser(['conditions' => 'room_room_id = '.$room->room_id]) as $item){
+              foreach ($room->getUser(['conditions' => 'room_room_id = '.$room->room_id.' and role = "speaker"']) as $item){
                  $username = $item->second_name . ' ' . $item->name;
                 ?>
               <li class="list-group-item">

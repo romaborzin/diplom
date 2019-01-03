@@ -74,10 +74,13 @@ class SecurityPlugin extends Plugin
 		// Private area resources (backend)
 		$allPrivateResources = [
 		    
-		    'session'    => ['index','logout'],
+		    'session'   	=> ['index','logout'],
 		    'conference'    => ['create'],
-		    'user'    => ['settings','delete'],
-		    'room'	=> ['edit'],
+		    'conference' 	=> ['index'],
+		    'talks'    		=> ['index'],
+		    'statistic'    	=> ['index'],
+		    'user'    		=> ['settings','delete'],
+		    'room'			=> ['edit'],
 
 		];
 		$adminResources = [
@@ -99,11 +102,8 @@ class SecurityPlugin extends Plugin
 		// Public area resources (frontend)
 		$publicResources = [
 		    'index'    => ['index'],
-		    'session'    => ['index'],
-		    'conference' => ['index'],
-		    'talks'    => ['index'],
-		    'statistic'    => ['index'],
-		    'user'    => ['index','create','search','new','save'],
+		    'session'  => ['index'],
+		    'user'     => ['index','create','search','new','save'],
 
 		];
 
