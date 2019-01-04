@@ -13,35 +13,97 @@
       <div class="row">
         <div class="col-md-3">
           <b >Выберете тип комнат:</b>
+           <?php
+            echo $this->tag->form(
+                [
+                    "statistic/index",
+                    "autocomplete" => "off",
+                    "class" => "form-horizontal"
+                ]
+            );
+        ?>
           <div class="btn-group my-2">
-            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Выберете тип </button>
-            <div class="dropdown-menu"> <a class="dropdown-item" href="#">Конференции</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Переговоры</a>
+            
+              <?
+              echo $this->tag->selectStatic( 
+                [ 
+                  "type", 
+                  [ 
+                    ""            => "Не выбрано", 
+                    "conference"  => "Конференции", 
+                    "talks"       => "Переговоры", 
+                  ] , "class"=>"btn btn-primary"
+                ] 
+              );
+              ?>
+
             </div>
 
-          </div>
           <hr>
           <div>
             <b class="my-2">Выберете период для построения графика</b>
 
             <p class="my-1">Начало:</p>
-            <input type="date" class="form-control my-2" id="date" name="date" placeholder="Дата" required="">
+             <?php echo $this->tag->dateField(["date1", "class" => "form-control my-2", "id" => "fieldDate1"]) ?>
           </div>
           <div>
             <p class="my-1">Конец:</p>
-            <input type="date" class="form-control my-2" id="date" name="date" placeholder="Дата" required="">
+             <?php echo $this->tag->dateField(["date2", "class" => "form-control my-2", "id" => "fieldDate2"]) ?>
           </div>
           <hr>
           <div>
-            <a class="btn btn-primary my-2" href="#">Построить</a>
+            <?php echo $this->tag->submitButton(["Построить", "class" => "btn btn-primary my-2"]) ?>
           </div>
+           <?php echo $this->tag->endForm(); ?>
         </div>
         <div class="col-md-9">
-          <div class="col-md-12" ><img class="img-fluid d-block mx-auto" src="https://static.pingendo.com/img-placeholder-1.svg"></div>
+          <div class="col-md-12" >
+            <?php echo $this->getContent(); ?>
+            <? echo $col." ".$date1." ".$date2;
+            foreach ($room as $item)
+                  { 
+                    echo $item->name;
+                    echo $item->date;
+                    echo count($item->date);
+                  }
+            ?>
+            <div id="chart_div"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+ 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.arrayToDataTable([
+         ['Element', 'Density' ],
+          <?
+          foreach($room as $item) {
+                  $date=$item->date;
+                  echo '['.$date.', '.cout($item->date).'],\n';
+          }
+          ?>
+        ['Copper', 8.94],
+         ['Silver', 10.49],
+         ['Gold', 19.30],
+         ['Platinum', 21.45]
+      ]);
+  
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
+      chart.draw(view, options);
+  }
+  </script>
 
  

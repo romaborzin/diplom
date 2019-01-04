@@ -23,7 +23,7 @@ class Room extends \Phalcon\Mvc\Model
      */
     public $description;
 
-    public $date_time;
+    public $date;
 
     public $type;
 

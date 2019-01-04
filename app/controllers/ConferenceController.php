@@ -33,7 +33,7 @@ class ConferenceController extends \Phalcon\Mvc\Controller
         // Сохраняем и проверяем на наличие ошибок
         $success = $room->save(
             [
-                'date_time' => date("Y-m-d H:i:s"),
+                'date' => date("Y-m-d"),
                 'name' => $name,
                 'description' => $description,
                 "type" => $type,
@@ -91,10 +91,7 @@ class ConferenceController extends \Phalcon\Mvc\Controller
         if (count($room) == 0) {
             $this->flash->notice("По результатам поиска, комната не найдена");
 
-            $this->dispatcher->forward([
-                "controller" => "room",
-                "action" => "index"
-            ]);
+            
 
             return;
         }
