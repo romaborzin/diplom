@@ -36,7 +36,7 @@
             </thead>
             <tbody>
               <? 
-
+              if($room!=null)
               foreach ($room->getUser(['conditions' => 'room_room_id = '.$room->room_id.' and role = "speaker"']) as $item){?>
                 <tr>
                   <td><?php echo $item->email ?></td>

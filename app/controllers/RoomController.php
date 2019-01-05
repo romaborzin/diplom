@@ -16,12 +16,12 @@ class RoomController extends \Phalcon\Mvc\Controller
                 return;
             }
             $this->view->room_id = $room->room_id;
+            $this->tag->setDefault("room_id", $room->room_id);
             $this->tag->setDefault("name", $room->name);
             $this->tag->setDefault("description", $room->description);
             
         }
         
-        $this->view->room = $room;
     }
 
      public function indexAction($room_id = null)
@@ -122,10 +122,10 @@ class RoomController extends \Phalcon\Mvc\Controller
             if (!$room) {
                 $this->flash->error("Комната не найдена");
                 return;
-            }
-            
+            }else
+            $this->view->room = $room;
         }
-        $this->view->room = $room;
+        
         
     }
 
