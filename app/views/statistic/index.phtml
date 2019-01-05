@@ -58,16 +58,11 @@
         </div>
         <div class="col-md-9">
           <div class="col-md-12" >
-            <?php echo $this->getContent(); ?>
-            <? echo $col." ".$date1." ".$date2;
-            foreach ($room as $item)
-                  { 
-                    echo $item->name;
-                    echo $item->date;
-                    echo count($item->date);
-                  }
+            <?php echo $this->getContent(); 
+            
+            echo "Количество комнат за данный период: ".count($room);
             ?>
-            <div id="chart_div"></div>
+            <div id="chart_div" class="text-center">График загружается</div>
           </div>
         </div>
       </div>
@@ -80,29 +75,26 @@
     google.charts.load("current", {packages:['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-      var data = new google.visualization.arrayToDataTable([
-         ['Element', 'Density' ],
+      var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Дата');
+    data.addColumn('number', 'Комнат');
+    data.addRows([
           <?
-          foreach($room as $item) {
-                  $date=$item->date;
-                  echo '['.$date.', '.cout($item->date).'],\n';
+          foreach($gr as $item) {
+                  echo "['".$item[0]."' , ".$item[1]." ],\n";
           }
           ?>
-        ['Copper', 8.94],
-         ['Silver', 10.49],
-         ['Gold', 19.30],
-         ['Platinum', 21.45]
       ]);
   
       var options = {
-        title: "Density of Precious Metals, in g/cm^3",
+        title: "Количество созданных комнат к дате",
         width: 600,
         height: 400,
         bar: {groupWidth: "95%"},
         legend: { position: "none" },
       };
       var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
-      chart.draw(view, options);
+      chart.draw(data, options);
   }
   </script>
 
