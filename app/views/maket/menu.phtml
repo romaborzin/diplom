@@ -35,7 +35,16 @@
       </div>
     </form>
     <div class="form-group">
-       <a href="/diplom/user/new" style="width:100%" class="btn btn-outline-primary">Регистрация</a>
+    <?
+                echo Phalcon\Tag::linkTo(
+                    [
+                        "user/new",
+                        'Регистрация',
+                        "class" => "btn btn-outline-primary",
+                        "style"=>"width:100%",
+                    ]
+                );
+              ?>
       </div>
         <?
           if($error != null) {
