@@ -54,8 +54,8 @@
             </div>
         </div>
         <div class="col-md-6">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe src="https://www.youtube.com/embed/ctvlUvN6wSE?controls=0" allowfullscreen="" class="embed-responsive-item"></iframe>
+          <div class="booth" style="text-align: center">
+            <video id="video" width="400" height="300" autoplay></video>
           </div>
         </div>
         <div class="col-md-3">
@@ -95,3 +95,20 @@
       </div>
     </div>
   </div>
+  <script>
+  (function() {
+  var video = document.getElementById('video'),
+   vendorUrl = window.URL || window.webkitURL;
+  navigator.getMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.
+mozGetUserMedia || navigator.msGetUserMedia;
+  navigator.getMedia({
+   video: true,
+   audio: false
+  }, function(stream) {
+   video.src = vendorUrl.createObjectURL(stream);
+   video.play();
+  }, function(error) {
+   alert('Ошибка! Что-то пошло не так, попробуйте позже.');
+  });
+})();
+  </script>

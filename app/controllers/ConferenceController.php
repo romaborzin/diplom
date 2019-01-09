@@ -50,7 +50,7 @@ class ConferenceController extends \Phalcon\Mvc\Controller
                 $this->dispatcher->forward(
                     [
                         'controller' => 'room',
-                        'action' => 'edit',
+                        'action' => 'index',
                         'params' => ['room_id' => $room->room_id],
                     ]
                 );
