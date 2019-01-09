@@ -23,7 +23,11 @@ class Message extends \Phalcon\Mvc\Model
      */
     public $text;
 
-    
+     /**
+     *
+     * @var integer
+     */
+    public $user_id;
 
     /**
      * Initialize method for model.
@@ -38,14 +42,6 @@ class Message extends \Phalcon\Mvc\Model
             'message_message_id', 'room_room_id', 
             'Message',
             'room_id'
-            
-        );
-         $this->hasManyToMany(
-            'message_id',
-            'RoomHasMessage',
-            'message_message_id', 'room_room_id', 
-            'User',
-            'user_id'
             
         );
         $this->belongsTo('room_room_id', 'Room', 'room_id', ['alias' => 'Room']);

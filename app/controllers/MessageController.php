@@ -15,14 +15,13 @@ public function createAction()
             [
                 'date_time' => date("Y-m-d H:i:s"),
                 'text' => $this->request->getPost('text'),
-                'room_id' => $room_id,
+                'user_id' => $user_id,
             ]
         );
             if ($success) {
             $roomHasMessage = new RoomHasMessage();
             $roomHasMessage->Message = $message;
             $roomHasMessage->Room = $room;
-            $roomHasMessage->User = $user;
             $success = $roomHasMessage->save([]);
             if ($success) {
                 $this->dispatcher->forward(

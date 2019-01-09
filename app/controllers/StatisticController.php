@@ -116,9 +116,8 @@ class StatisticController extends \Phalcon\Mvc\Controller
 		    ]
 			);
 			
-			
 			foreach ($room1 as $item) {
-				$gr1[] = array($item->date,0,0);
+				$gr1[] = array($item->date,0);
 			}
 			for ($i=0; $i<count($gr1); $i++){
 				for ($j=0; $j<count($gr1); $j++){
@@ -133,15 +132,28 @@ class StatisticController extends \Phalcon\Mvc\Controller
 					}
 				}}
 			}
-
+			$gu = array();
+       		$gu1 = array();
 			foreach ($room1 as $a) {
 				foreach ($guest as $b) {
 					if($a->room_id == $b->room_room_id){
-						echo $a->name." найден гость<br>";
+						$gu1[] = array($a->date,0);
 					}
 				}
 			}
-			
+			for ($i=0; $i<count($gu1); $i++){
+				for ($j=0; $j<count($gu1); $j++){
+					if(isset($gu1[$i][1]))
+				{
+					if($gu1[$i][0]==$gu1[$j][0]){
+						//echo $gr1[$i][0]." ".$gr1[$j][0]."<br>";
+						$gu1[$i][1]=$gu1[$i][1]+1;
+						if($gu1[$j][1]>1){
+							unset($gu1[$i]);
+						}
+					}
+				}}
+			}
 			
 			for ($i=0; $i<count($gr1); $i++){
 				
@@ -151,9 +163,22 @@ class StatisticController extends \Phalcon\Mvc\Controller
 				}
 			}
 			
-			
-			
+			for ($i=0; $i<count($gu1); $i++){
+				
+				if($gu1[$i][1]!="")
+				{
+					$gu[] = array($gu1[$i][0], $gu1[$i][1]);
+				}
+			}
 
+			asort($gr);
+			asort($gu);
+			$summ = 0;
+			foreach($gu as $v)
+				  $summ += $v[1];
+				  
+			$this->view->summ = $summ;
+			$this->view->gu = $gu;
 			$this->view->gr = $gr;
 			$this->view->room = $room1;
 			$this->view->col = $room;

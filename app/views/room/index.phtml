@@ -30,12 +30,11 @@
              
             
                 <?  foreach ($room->getMessage(['conditions' => 'room_room_id = '.$room->room_id]) as $message) {
-                        
-                        $item = $message->getUser();
+                        $item = User::findFirst($message->user_id);
                         $username = $item->second_name . ' ' . $item->name;
                         ?>
                         <li class="list-group-item">
-                          <? echo $username.' '.$message->date_time.'<br>';
+                          <? echo $username.'<br>'.$message->date_time.'<br>';
                              echo $message->text;
                              ?>
                         </li><?

@@ -59,10 +59,13 @@
         <div class="col-md-9">
           <div class="col-md-12" >
             <?php echo $this->getContent(); 
-            
             echo "Количество комнат за данный период: ".count($room);
             ?>
             <div id="chart_div" class="text-center">График загружается</div>
+            <?php echo $this->getContent(); 
+            echo "Количество гостей за данный период: ".$summ;
+            ?>
+            <div id="chart_div2" class="text-center">График загружается</div>
           </div>
         </div>
       </div>
@@ -85,7 +88,16 @@
           }
           ?>
       ]);
-  
+      var data2 = new google.visualization.DataTable();
+        data2.addColumn('string', 'Дата');
+    data2.addColumn('number', 'Гостей');
+    data2.addRows([
+          <?
+          foreach($gu as $item) {
+                  echo "['".$item[0]."' , ".$item[1]." ],\n";
+          }
+          ?>
+      ]);
       var options = {
         title: "Количество созданных комнат к дате",
         width: 600,
@@ -93,8 +105,17 @@
         bar: {groupWidth: "95%"},
         legend: { position: "none" },
       };
+      var options2 = {
+        title: "Количество гостей комнат к дате",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
       var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
       chart.draw(data, options);
+      var chart2 = new google.visualization.ColumnChart(document.getElementById("chart_div2"));
+      chart2.draw(data2, options2);
   }
   </script>
 
