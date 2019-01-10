@@ -117,56 +117,52 @@ class StatisticController extends \Phalcon\Mvc\Controller
 			);
 			
 			foreach ($room1 as $item) {
-				$gr1[] = array($item->date,0);
+				$gr1[] = array($item->date,1);
 			}
 			
-			for ($i=0; $i<count($gr1); $i++){
-					
-				echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
 			
-		}
 			for ($i=0; $i<count($gr1); $i++){
 				for ($j=0; $j<count($gr1); $j++){
+					if($i!=$j){					
 					if(isset($gr1[$i][1]))
 				{
 					if($gr1[$i][0]==$gr1[$j][0]){
-						//echo $gr1[$i][0]." ".$gr1[$j][0]."<br>";
+						//echo $gr1[$j][0]." ".$gr1[$j][1]."<br>";
 						$gr1[$i][1]=$gr1[$i][1]+1;
 						if($gr1[$j][1]>1){
-							unset($gr1[$i]);
+							$gr1[$i][0]='';
 						}
 					}
-				}}
+				}}}
 			}
 			$gu = array();
        		$gu1 = array();
 			foreach ($room1 as $a) {
 				foreach ($guest as $b) {
 					if($a->room_id == $b->room_room_id){
-						$gu1[] = array($a->date,0);
+						$gu1[] = array($a->date,1);
 					}
 				}
 			}
 			
 			for ($i=0; $i<count($gu1); $i++){
 				for ($j=0; $j<count($gu1); $j++){
+					if($i!=$j){	
 					if(isset($gu1[$i][1]))
 				{
 					if($gu1[$i][0]==$gu1[$j][0]){
 						
 						$gu1[$i][1]=$gu1[$i][1]+1;
 						if($gu1[$j][1]>1){
-							unset($gu1[$i]);
+							$gu1[$i][0]='';
 						}
-					}
+					}}
 				}}
 			}
-			
 			for ($i=0; $i<count($gr1); $i++){
 				
-				if($gr1[$i][0]!="" ||$gr1[$i][1]!="")
+				if($gr1[$i][0]!="")
 				{
-					echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
 					$gr[] = array($gr1[$i][0], $gr1[$i][1]);
 				}
 			}
