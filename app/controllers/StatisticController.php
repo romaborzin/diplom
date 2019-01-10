@@ -18,9 +18,13 @@ class StatisticController extends \Phalcon\Mvc\Controller
 	public function indexAction(){
         $type =$this->request->getPost("type");
         $date1 =$this->request->getPost("date1");
-        $date2 =$this->request->getPost("date2");
+		$date2 =$this->request->getPost("date2");
+		
        	if($type && $date1 && $date2){
-       	$room1 = Room::find(
+			if($date1 > $date2)  {
+				$this->flash->error('Произошла ошибка: Дата начала больше даты конца периода');
+			} else{   
+			$room1 = Room::find(
 		    [
 		        'date >= ?1 AND date <= ?2 AND type = ?3',
 		        'bind' => [
@@ -31,8 +35,8 @@ class StatisticController extends \Phalcon\Mvc\Controller
 		    ]
 		);
 		$room = count($room1);
-       }
-       if($type){
+	   }}
+	   if($type){
        		$room1 = Room::find(
 		    [
 		        'type = ?1',
@@ -90,7 +94,10 @@ class StatisticController extends \Phalcon\Mvc\Controller
 		$room = count($room1);
        }
        if($date1 && $date2){
-       	$room1 = Room::find(
+		if($date1 > $date2)  {
+			$this->flash->error('Произошла ошибка: Дата начала больше даты конца периода');
+		} else{
+		$room1 = Room::find(
 		    [
 		        'date >= ?1 AND date <= ?2',
 		        'bind' => [
@@ -100,7 +107,7 @@ class StatisticController extends \Phalcon\Mvc\Controller
 		    ]
 		);
 		$room = count($room1);
-       }
+       }}
        if(!$type && !$date1 && !$date2){
        	$room1 = Room::find();
        	$room = count($room1);
@@ -191,7 +198,6 @@ class StatisticController extends \Phalcon\Mvc\Controller
 		}
 		else{
 			$this->flash->notice('По данным параметрам конференций и переговоров не проводилось');
-			$this->flash->error('Произошла ошибка: '.$type." ".$date1." ".$date2);
 		}
 
 	}
