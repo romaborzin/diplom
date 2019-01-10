@@ -1,17 +1,17 @@
 <div class="py-2">
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-        
+        <div class="row">
+            <div class="col-md-12">
+
+            </div>
         </div>
-      </div>
     </div>
 </div>
 <div>
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-        <?php
+        <div class="row">
+            <div class="col-md-12">
+                <?php
             echo $this->tag->form(
                 [
                     "room/result/".$type,
@@ -20,54 +20,54 @@
                 ]
             );
         ?>
-            <div class="form-group">
-                <label for="fieldName" class="control-label">Название конмнаты</label>
-                <div >
-                    <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control", "id" => "fieldName"]) ?>
+                <div class="form-group">
+                    <label for="fieldName" class="control-label">Название конмнаты</label>
+                    <div>
+                        <?php echo $this->tag->textField(["name", "size" => 30, "class" => "form-control", "id" => "fieldName"]) ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="fieldDate" class="control-label">Дата создания</label>
-                <div>
-                    
-                    <?php echo $this->tag->dateField(["date", "size" => 30, "class" => "form-control", "id" => "fieldDate"]) ?>
+                <div class="form-group">
+                    <label for="fieldDate" class="control-label">Дата создания</label>
+                    <div>
+
+                        <?php echo $this->tag->dateField(["date", "size" => 30, "class" => "form-control", "id" => "fieldDate"]) ?>
+                    </div>
                 </div>
-            </div>
 
-            <?php echo $this->tag->hiddenField(
+                <?php echo $this->tag->hiddenField(
                 [
                     "type", 
                     "value" => $type,
                 ]
             )?>
-            
 
-            
-            
 
-            <div class="form-group">
-                <div>
-                    <?php echo $this->tag->submitButton(["Поиск", "class" => "btn btn-default"]) ?>
+
+
+
+                <div class="form-group">
+                    <div>
+                        <?php echo $this->tag->submitButton(["Поиск", "class" => "btn btn-default"]) ?>
+                    </div>
                 </div>
             </div>
-            </div>
-        <?php echo $this->tag->endForm(); ?>
+            <?php echo $this->tag->endForm(); ?>
         </div>
-    
-<div class="col-md-12">
 
-<div class="page-header">
-    <h1>Результаты поиска</h1>
-</div>
+        <div class="col-md-12">
+
+            <div class="page-header">
+                <h1>Результаты поиска</h1>
+            </div>
 
 
-  <div class="py-3" >
-    <div class="container">
-      <div class="row">
-    <div class="col-md-9">
-          <div class="list-group">
-         <?
+            <div class="py-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="list-group">
+                                <?
           foreach ($room as $item)
             { 
       echo $this->tag->linkTo( 
@@ -83,13 +83,13 @@
         "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
       ]
       );} ?>
-            
-          </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
