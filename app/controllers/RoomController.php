@@ -228,11 +228,11 @@ class RoomController extends \Phalcon\Mvc\Controller
 
     public function resultAction($type=null)
     {
-        echo "";
-         $numberPage = 1;
+        
         if ($this->request->isPost()) {
             $query = Criteria::fromInput($this->di, 'Room', $_POST);
             $this->persistent->parameters = $query->getParams();
+            $stype = $this->request->getPost('type');;
         } else {
             $numberPage = $this->request->getQuery("page", "int");
         }
@@ -251,7 +251,7 @@ class RoomController extends \Phalcon\Mvc\Controller
         }
         else{
             $this->view->room = $room;
-      $this->view->type = $type;
+      $this->view->type = $stype;
         }
 
         

@@ -2,11 +2,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-        <? if($room->type=='conference')
-          echo '<h1 class="h1 text-center">Поиск конференции</h1>';
-            elseif($room->type=='talks')
-            echo '<h1 class="h1 text-center">Поиск переговоров</h1>';
-          ?>
+        
         </div>
       </div>
     </div>
@@ -18,7 +14,7 @@
         <?php
             echo $this->tag->form(
                 [
-                    "room/result/".$room->type,
+                    "room/result/".$type,
                     "autocomplete" => "off",
                     "class" => "form-horizontal"
                 ]
@@ -42,7 +38,7 @@
             <?php echo $this->tag->hiddenField(
                 [
                     "type", 
-                    "value" => $room->type,
+                    "value" => $type,
                 ]
             )?>
             
