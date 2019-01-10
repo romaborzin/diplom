@@ -143,10 +143,16 @@ class StatisticController extends \Phalcon\Mvc\Controller
 			}
 			for ($i=0; $i<count($gu1); $i++){
 				for ($j=0; $j<count($gu1); $j++){
+					
+					echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
+				}
+			}
+			for ($i=0; $i<count($gu1); $i++){
+				for ($j=0; $j<count($gu1); $j++){
 					if(isset($gu1[$i][1]))
 				{
 					if($gu1[$i][0]==$gu1[$j][0]){
-						//echo $gr1[$i][0]." ".$gr1[$j][0]."<br>";
+						
 						$gu1[$i][1]=$gu1[$i][1]+1;
 						if($gu1[$j][1]>1){
 							unset($gu1[$i]);
