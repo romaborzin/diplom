@@ -156,7 +156,7 @@ class StatisticController extends \Phalcon\Mvc\Controller
 			}
 			
 			for ($i=0; $i<count($gr1); $i++){
-				
+				echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
 				if($gr1[$i][1]!="")
 				{
 					$gr[] = array($gr1[$i][0], $gr1[$i][1]);
