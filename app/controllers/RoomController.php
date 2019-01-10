@@ -1,5 +1,9 @@
 <?php
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Mvc\Model\Criteria;
+
+use Phalcon\Mvc\View;
 
 class RoomController extends \Phalcon\Mvc\Controller
 {
@@ -159,5 +163,102 @@ class RoomController extends \Phalcon\Mvc\Controller
     }else
     $this->flash->success('Пользователь уже является выступающим');
     }
+
+    public function listAction($type=null, $currentPage=1){
+		$room = Room::find("type = '".$type."'");
+		// Создаём пагинатор, отображаются 4 элемента на странице, начиная с текущей - $currentPage
+		$paginator = new PaginatorModel(
+			[ 
+				"data" => $room,
+				"limit" => 3,
+				"page" => $currentPage,
+			]
+		);
+		// Получение результатов работы ппагинатора 
+        $this->view->page = $paginator->getPaginate();
+        $this->view->type = $type;
+    }
+
+	public function createAction($type=null){
+ 		$room = new Room();
+        $user_id = $this->session->auth['id'];
+        $user = User::findFirst($user_id);
+        $role = "manager";
+        $name = $this->request->getPost('name');
+        $description = $this->request->getPost('description');
+        // Сохраняем и проверяем на наличие ошибок
+        $success = $room->save(
+            [
+                'date' => date("Y-m-d"),
+                'name' => $name,
+                'description' => $description,
+                "type" => $type,
+
+            ]
+        );
+               
+        if ($success) {
+            $userHasRoom = new UserHasRoom();
+            $userHasRoom->User = $user;
+            $userHasRoom->Room = $room;
+            $success = $userHasRoom->save(['role'=>$role,]);
+            if ($success) {
+                $this->dispatcher->forward(
+                    [
+                        'controller' => 'room',
+                        'action' => 'index',
+                        'params' => ['room_id' => $room->room_id],
+                    ]
+                );
+            } else {
+                echo "К сожалению, возникли следующие проблемы: ";
+                $messages = $room->getMessages();
+                foreach ($messages as $message) {
+                    echo $message->getMessage(), "<br/>";
+                }
+            }
+        } else {
+            echo "К сожалению, возникли следующие проблемы: ";
+            $messages = $room->getMessages();
+            foreach ($messages as $message) {
+                echo $message->getMessage(), "<br/>";
+            }
+        }
+	}
+
+    public function resultAction($type=null)
+    {
+        echo "";
+         $numberPage = 1;
+        if ($this->request->isPost()) {
+            $query = Criteria::fromInput($this->di, 'Room', $_POST);
+            $this->persistent->parameters = $query->getParams();
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+
+        $parameters = $this->persistent->parameters;
+        if (!is_array($parameters)) {
+            $parameters = [];
+        }
+        $parameters["order"] = "room_id";
+
+        $room = Room::find($parameters);
+        
+        if(!$room){
+            $this->flash->notice("По результатам поиска, комната не найдена");
+            return;
+        }
+        else{
+            $this->view->room = $room;
+      $this->view->type = $type;
+        }
+
+        
+    }
     
+    public function searchAction($type=null)
+    {
+        $this->view->type = $type;
+    }
 }

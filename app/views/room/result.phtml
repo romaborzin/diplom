@@ -2,7 +2,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1 class="h1 text-center">Поиск конференции</h1>
+        <? if($room->type=='conference')
+          echo '<h1 class="h1 text-center">Поиск конференции</h1>';
+            elseif($room->type=='talks')
+            echo '<h1 class="h1 text-center">Поиск переговоров</h1>';
+          ?>
         </div>
       </div>
     </div>
@@ -14,7 +18,7 @@
         <?php
             echo $this->tag->form(
                 [
-                    "conference/search",
+                    "room/result/".$room->type,
                     "autocomplete" => "off",
                     "class" => "form-horizontal"
                 ]
@@ -38,7 +42,7 @@
             <?php echo $this->tag->hiddenField(
                 [
                     "type", 
-                    "value" => "conference",
+                    "value" => $room->type,
                 ]
             )?>
             
@@ -61,29 +65,29 @@
     <h1>Результаты поиска</h1>
 </div>
 
-<?php echo $this->getContent(); ?>
+
   <div class="py-3" >
     <div class="container">
       <div class="row">
     <div class="col-md-9">
           <div class="list-group">
-            <?php 
-              
-                  foreach ($page->items as $item)
-                  { 
-            echo $this->tag->linkTo( 
-              [
-                "room/index/".$item->room_id,
-                " <div class='d-flex w-100 justify-content-between'>
-                <h5 class='mb-1'>".$item->name."</h5>
-                <smal>".$item->date."</smal>
-              </div>
-              <div class='d-flex w-100 justify-content-between'>
-                <p class='mb-1'>".$item->description."</p>
-              </div>",
-              "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
-            ]
-            );} ?>
+         <?
+          foreach ($room as $item)
+            { 
+      echo $this->tag->linkTo( 
+        [
+          "room/index/".$item->room_id,
+          " <div class='d-flex w-100 justify-content-between'>
+          <h5 class='mb-1'>".$item->name."</h5>
+          <smal>".$item->date."</smal>
+        </div>
+        <div class='d-flex w-100 justify-content-between'>
+          <p class='mb-1'>".$item->description."</p>
+        </div>",
+        "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
+      ]
+      );} ?>
+            
           </div>
         </div>
     </div>

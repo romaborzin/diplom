@@ -2,7 +2,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1 class="h1 text-center">Переговоры</h1>
+        <? if($type=='conference')
+          echo '<h1 class="h1 text-center">Конференции</h1>';
+            elseif($type=='talks')
+            echo '<h1 class="h1 text-center">Переговоры</h1>';
+          ?>
         </div>
       </div>
     </div>
@@ -13,27 +17,28 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
-          <div class="list-group">
-             <?
+          <div class="list-group2">
+            <?
             echo $this->tag->linkTo( 
                 [
                   "",
                   '<i class="fa fa-plus text-primary mr-2" aria-hidden="true"></i> Создание комнаты',
                   'class' => 'list-group-item list-group-item-action',
                   'data-toggle' => 'modal',
-                  'data-target' => '#createTalks'
+                  'data-target' => '#createRoom'
                 ]
               );
             ?>
             <?
             echo $this->tag->linkTo( 
                 [
-                  "talks/search",
+                  "room/search/".$type,
                   '<i class="fa fa-search text-primary mr-2" aria-hidden="true"></i> Поиск комнаты',
                   'class' => 'list-group-item list-group-item-action',
                 ]
               );
             ?>
+            
           </div>
         </div>
         <div class="col-md-9">
@@ -58,11 +63,48 @@
           </div>
         </div>
       </div>
+      
+
     </div>
   </div>
+  <div class="py-2" id="paginator" style="text-align: center;">
+  <?echo $this->tag->linkTo( 
+                [
+                  "room/list/".$type,
+                  'Первая',
+                  'class' => 'btn navbar-btn m-2 text-white btn-dark',
+                ]
+              );?>
+   <?echo $this->tag->linkTo( 
+                [
+                  "room/list/".$type."/".$page->before,
+                  'Предыдущая',
+                  'class' => 'btn navbar-btn m-2 text-white btn-dark',
+                ]
+              );?>         
+     <?echo $this->tag->linkTo( 
+                [
+                  "room/list/".$type."/".$page->next,
+                  'Следующая',
+                  'class' => 'btn navbar-btn m-2 text-white btn-dark',
+                ]
+              );?>
+   <?echo $this->tag->linkTo( 
+                [
+                  "room/list/".$type."/".$page->last,
+                  'Последняя',
+                  'class' => 'btn navbar-btn m-2 text-white btn-dark',
+                ]
+              );?>  
+              <br>       
+  <?php echo "Вы на странице ", $page->current, " из ", $page->total_pages; ?>
 
-   <div class="modal fade" id="createTalks">
+            
+  </div>
+
+  <div class="modal fade" id="createRoom">
   <div class="modal-dialog " role="document">
+    
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Создать комнату</h4>
@@ -77,7 +119,7 @@
               ?>
         <?echo Phalcon\Tag::form(
             [
-                "talks/create",
+                "room/create/".$type,
                 "method" => "post",
                 "class"=>"form-horizontal",
             ]
@@ -98,6 +140,10 @@
     <h5>Авторизируйтесь для создания комнаты</h5>
     <?}?>
       </div>
+      
     </div><!-- /.модальное окно-Содержание -->
+
   </div><!-- /.модальное окно-диалог -->
 </div>
+
+
