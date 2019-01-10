@@ -119,6 +119,12 @@ class StatisticController extends \Phalcon\Mvc\Controller
 			foreach ($room1 as $item) {
 				$gr1[] = array($item->date,0);
 			}
+			
+			for ($i=0; $i<count($gr1); $i++){
+					
+				echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
+			
+		}
 			for ($i=0; $i<count($gr1); $i++){
 				for ($j=0; $j<count($gr1); $j++){
 					if(isset($gr1[$i][1]))
@@ -141,11 +147,7 @@ class StatisticController extends \Phalcon\Mvc\Controller
 					}
 				}
 			}
-			for ($i=0; $i<count($gr1); $i++){
-					
-					echo $gr1[$i][0]." ".$gr1[$i][1]."<br>";
-				
-			}
+			
 			for ($i=0; $i<count($gu1); $i++){
 				for ($j=0; $j<count($gu1); $j++){
 					if(isset($gu1[$i][1]))
