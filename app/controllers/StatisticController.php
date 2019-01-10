@@ -165,7 +165,7 @@ class StatisticController extends \Phalcon\Mvc\Controller
 			
 			for ($i=0; $i<count($gu1); $i++){
 				
-				if($gu1[$i][1]!="")
+				if($gu1[$i][0]!="" || $gu1[$i][1]!="")
 				{
 					$gu[] = array($gu1[$i][0], $gu1[$i][1]);
 				}
