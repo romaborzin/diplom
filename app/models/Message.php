@@ -1,6 +1,7 @@
 <?php
 
-
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Regex as RegexValidator;
 
 class Message extends \Phalcon\Mvc\Model
 {
@@ -69,6 +70,28 @@ class Message extends \Phalcon\Mvc\Model
         return parent::find($parameters);
     }
 
+    public function validation()
+    {
+        $validator = new Validation();
+
+
+        $validator->add(
+            [
+                "text"
+            ],
+            new RegexValidator(
+                [
+                    "pattern" => [
+                        "text" => "/^[А-Яа-яЁё\s]{1,45}/",
+                        "message" => "Сообщение должно содержать русские буквы и быть длиной менее 45 символов"
+                    ]
+                   
+                ]
+            )
+        );
+
+        return $this->validate($validator);
+    }
     /**
      * Allows to query the first record that match the specified conditions
      *

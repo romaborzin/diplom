@@ -40,7 +40,7 @@ public function createAction()
             }
         } else {
             echo "К сожалению, возникли следующие проблемы: ";
-            $messages = $course->getMessages();
+            $messages = $room->getMessages();
             foreach ($messages as $message) {
                 echo $message->getMessage(), "<br/>";
             }
