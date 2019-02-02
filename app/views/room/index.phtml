@@ -50,7 +50,7 @@
           </ul>
           <div class="card card-footer">
                     <?php echo $this->tag->form(["message/create", "method" => 'POST', "class" => 'form-inline']); ?>
-                    <?php echo $this->tag->textArea(["text", "class" => 'w-100', "rows" => '3', "pattern"=>"^[А-Яа-яЁё\s]{,45}"]); ?>
+                    <?php echo $this->tag->textArea(["text", "class" => 'w-100', "rows" => '3', "pattern"=>"/^[А-Яа-яЁё\s]{1,45}/"]); ?>
                     <?php echo $this->tag->hiddenField(['room_id', "value" => $room->room_id]); ?>
                     <?php echo $this->tag->hiddenField(['user_id', "value" => $this->session->get('auth')['id']]); ?>
                     <?php echo $this->tag->submitButton(['Отправить', "class" => "btn btn-success w-100"]); ?>

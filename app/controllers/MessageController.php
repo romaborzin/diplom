@@ -39,11 +39,17 @@ public function createAction()
                 }
             }
         } else {
-            echo "К сожалению, возникли следующие проблемы: ";
-            $messages = $room->getMessages();
+            $messages = $message->getMessages();
             foreach ($messages as $message) {
-                echo $message->getMessage(), "<br/>";
+                $this->flash->error($message->getMessage());
             }
+            $this->dispatcher->forward(
+                [
+                    'controller' => 'room',
+                    'action' => 'index',
+                    'params' => ['room_id' => $room->room_id, 'user' => $user],
+                ]
+            );
         }
     }
     }
