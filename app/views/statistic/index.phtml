@@ -61,11 +61,17 @@
             <?php echo $this->getContent(); 
             echo "Количество комнат за данный период: ".count($room);
             ?>
-            <div id="chart_div" class="text-center">График загружается</div>
+            <div id="chart_div" class="d-flex align-items-center">
+              <strong>Loading...</strong>
+              <div class="spinner-border " role="status" aria-hidden="true"></div>
+            </div>
             <?php echo $this->getContent(); 
             echo "Количество гостей за данный период: ".$summ;
             ?>
-            <div id="chart_div2" class="text-center">График загружается</div>
+            <div id="chart_div2" class="d-flex align-items-center">
+              <strong>Loading...</strong>
+              <div class="spinner-border" role="status" aria-hidden="true"></div>
+            </div>
           </div>
         </div>
       </div>
