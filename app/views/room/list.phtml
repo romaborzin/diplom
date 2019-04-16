@@ -133,6 +133,13 @@
           <textarea type="text" name="description" class="form-control" id="descriptionInput"></textarea>
         </div>
         <div class="form-group">
+          <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" onclick="change()" id="pass">Создать закрытую комнату</a>
+          <div class="collapse multi-collapse" id="multiCollapseExample1">
+            <label for="passwordInput">Введите пароль</label>
+            <input type="text" name="password" class="form-control" id="passwordInput">
+          </div>
+        </div>
+        <div class="form-group">
           <button type="submit" style="width:100%" class="btn btn-outline-primary">Создать комнату</button>
         </div>
         </form>
@@ -146,4 +153,10 @@
   </div><!-- /.модальное окно-диалог -->
 </div>
 
-
+<script>
+   function change() {
+    if(pass.innerText == "Создать закрытую комнату")
+    pass.innerText = "Создать открытую комнату";
+    else pass.innerText = "Создать закрытую комнату"
+   }
+  </script>
