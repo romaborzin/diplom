@@ -70,30 +70,7 @@ class Message extends \Phalcon\Mvc\Model
         return parent::find($parameters);
     }
 
-    public function validation()
-    {
-        $validator = new Validation();
-
-
-        $validator->add(
-            [
-                "text"
-            ],
-            new RegexValidator(
-                [
-                    "pattern" => [
-                        "text" => "/^[А-Яа-яЁё\s]{1,45}/",
-                    ],
-                    "message" => [
-                        "text" => "Сообщение должно содержать русские буквы и быть длиной менее 45 символов",
-                    ],
-                   
-                ]
-            )
-        );
-
-        return $this->validate($validator);
-    }
+    
     /**
      * Allows to query the first record that match the specified conditions
      *

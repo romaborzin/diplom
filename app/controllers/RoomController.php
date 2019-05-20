@@ -28,6 +28,53 @@ class RoomController extends \Phalcon\Mvc\Controller
         
     }
 
+    public function checkAction($room_id = null)
+    {
+       if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(
+                [
+                    'controller' => 'room',
+                    'action'     => 'list',
+                    'params' => [error=>'Заполните поля', 'room_id' => $room->room_id],
+                ]
+            );;
+        }
+        $room_id    = $this->request->getPost('room_id');
+        $password = $this->request->getPost('password');
+
+         //найдем пользователя, подходящего под параметры
+        $room = Room::findFirst(
+                [
+                    "room_id = :room_id:",
+                    'bind' => [
+                        'room_id'    => $room_id
+                    ]
+                ]
+            );
+        if($room->pass!='NULL'){
+        if ($room !== false && $this->security->checkHash($password, $room->pass)) {
+            /*если комната найдена и
+            пароли совпадают
+            переходим на след страницу*/
+            return $this->dispatcher->forward(
+                [
+                    'controller' => 'room',
+                    'action'     => 'index',
+                    'params' => ['room_id' => $room->room_id],
+                ]
+            );
+        }}
+
+        return $this->dispatcher->forward(
+            [
+                'controller' => 'room',
+                'action'     => 'index',
+                'params' => [error=>'Неверный пароль'],
+            ]
+        );
+        
+    }    
+
      public function indexAction($room_id = null)
     {
         // Получаем запрошенный курс
@@ -186,6 +233,12 @@ class RoomController extends \Phalcon\Mvc\Controller
         $role = "manager";
         $name = $this->request->getPost('name');
         $description = $this->request->getPost('description');
+        $pass = $this->request->getPost('password');
+        if(!$pass){
+            $pass=NULL;
+        }else{
+            $pass = $this->security->hash($pass);
+        }
         // Сохраняем и проверяем на наличие ошибок
         $success = $room->save(
             [
@@ -193,6 +246,7 @@ class RoomController extends \Phalcon\Mvc\Controller
                 'name' => $name,
                 'description' => $description,
                 "type" => $type,
+                'pass' => $pass,
 
             ]
         );

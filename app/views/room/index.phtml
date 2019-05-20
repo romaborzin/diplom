@@ -27,33 +27,52 @@
     </div>
   </div>
 
+<style type="text/css">
+  #message-box {
+    width: 100%;
+    display: inline-block;
+    height: 300px;
+    background: #fff;
+    box-shadow: inset 0px 0px 2px #00000017;
+    overflow: auto;
+    padding: 10px;
+}
+
+</style>
+
+
 <div class="py-5" >
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3" >
           <h3>Сообщения</h3>
-          <ul class="list-group list-group-flush" style="max-height: 40vh; overflow: auto;">
-             
-            
-                <?  foreach ($room->getMessage(['conditions' => 'room_room_id = '.$room->room_id]) as $message) {
-                        $item = User::findFirst($message->user_id);
-                        $username = $item->second_name . ' ' . $item->name;
-                        ?>
-                        <li class="list-group-item">
-                          <? echo $username.'<br>'.$message->date_time.'<br>';
-                             echo $message->text;
-                             ?>
-                        </li><?
+           <div id="message-box">
+            <?  foreach ($room->getMessage(['conditions' => 'room_room_id = '.$room->room_id]) as $message) {
+        $item = User::findFirst($message->user_id);
+        $username = $item->second_name . ' ' . $item->name;
+?>
+    <div class="list-group-item">
+        <? echo $username.'<br>'.$message->date_time.'<br>';
+            echo $message->text;
+        ?>
+    </div>
+    <?
                     }
                 ?>
+              </div>
+            
+               
                 
-          </ul>
           <div class="card card-footer">
-                    <?php echo $this->tag->form(["message/create", "method" => 'POST', "class" => 'form-inline']); ?>
-                    <?php echo $this->tag->textArea(["text", "class" => 'w-100', "rows" => '3', "pattern"=>"/^[А-Яа-яЁё\s]{1,45}/"]); ?>
+                   <form>
+                    <?php echo $this->tag->textField(["text", "class" => 'w-100', "name"=>"message", "id"=>"message"]); ?>
                     <?php echo $this->tag->hiddenField(['room_id', "value" => $room->room_id]); ?>
-                    <?php echo $this->tag->hiddenField(['user_id', "value" => $this->session->get('auth')['id']]); ?>
-                    <?php echo $this->tag->submitButton(['Отправить', "class" => "btn btn-success w-100"]); ?>
+                    <?php echo $this->tag->hiddenField(['user_id', "value" => $this->session->get('auth')['id']]);?>
+                    <?php 
+                        $item = User::findFirst($this->session->get('auth')['id']);
+                        $usernames = $item->second_name . ' ' . $item->name;
+                        echo $this->tag->hiddenField(['user_name', "value" => $usernames, "name"=>"name", "id"=>"name"]);?>
+                    <button id="send-message" class = "btn btn-success w-100" >Отправить</button>
                     </form>
                 
             </div>
@@ -101,7 +120,7 @@
     </div>
   </div>
   
-  <script>
+<!--  <script>
   var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
 
 navigator.mediaDevices.getUserMedia(constraints)
@@ -113,4 +132,89 @@ navigator.mediaDevices.getUserMedia(constraints)
   };
 })
 .catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
-  </script>
+  </script>-->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script language="javascript" type="text/javascript"> 
+  var msgBox = $('#message-box');
+  var wsUri = "ws://localhost:9001/demo/server.php";  
+  var staticUri = "<? echo ($this->config->application->staticUri ?? '') ?>";  
+  var room = '<? echo $room->room_id?>';
+  websocket = new WebSocket(wsUri); 
+  
+  var block = document.getElementById("message-box");
+  block.scrollTop = block.scrollHeight;
+  
+  websocket.onmessage = function(ev) {
+    var response    = JSON.parse(ev.data); 
+    
+     var res_type    = response.type; 
+    var user_message  = response.message; 
+    var user_name     = response.name; 
+   var message_date    = response.date; 
+   var room_id = response.room_id; 
+   if(room_id==room)
+   if(user_message)
+    switch(res_type){
+       case 'usermsg':
+       msgBox.append('<div class="list-group-item">' + user_name + '<br>' + message_date  + '<br>' + user_message +'</div>');    
+        break;
+      case 'system':
+        msgBox.append('<div class="list-group-item">' + user_message + '</div>');
+        break;
+    }
+msgBox[0].scrollTop = msgBox[0].scrollHeight; 
+  };
+  
+  websocket.onerror = function(ev){ msgBox.append('<div class="system_error">Error Occurred - ' + ev.data + '</div>'); }; 
+  websocket.onclose   = function(ev){ msgBox.append('<div class="system_msg">Connection Closed</div>'); }; 
+
+ 
+  $('#send-message').click(function(){
+    var message_input = $('#message');
+    sendAjax(message_input.val());
+    send_message();    
+    event.preventDefault();
+  });
+  
+  
+  $( "#message" ).on( "keydown", function( event ) {
+    if(event.which==13){
+      send_message();
+    }
+  });
+  
+ function sendAjax(message) {
+                $.ajax({
+
+                url: staticUri + 'message/create/' + room + '/' + message,
+                success: function(message) {
+                    console.log(message);
+                },
+                error:function() {
+                    alert('Ошибка при отправке ajax запроса');
+                    console.log("spec-add ajax error");
+                }
+            });
+        }
+
+  function send_message(){
+    var message_input = $('#message'); 
+    var name_input = $('#name'); 
+    
+    if(message_input.val() == ""){ 
+      alert("Введите сообщение!");
+      return;
+    }
+    
+    var msg = {
+      message: message_input.val(),
+      name: name_input.val(),
+      date : '<? echo date("Y-m-d H:i:s")?>',
+      room_id: '<? echo $room->room_id?>'
+    };
+    websocket.send(JSON.stringify(msg));  
+    message_input.val(''); 
+  }
+</script>

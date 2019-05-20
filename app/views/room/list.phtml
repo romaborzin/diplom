@@ -47,19 +47,38 @@
               
                   foreach ($page->items as $item)
                   { 
-            echo $this->tag->linkTo( 
-              [
-                "room/index/".$item->room_id,
-                " <div class='d-flex w-100 justify-content-between'>
-                <h5 class='mb-1'>".$item->name."</h5>
-                <smal>".$item->date."</smal>
-              </div>
-              <div class='d-flex w-100 justify-content-between'>
-                <p class='mb-1'>".$item->description."</p>
-              </div>",
-              "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
-            ]
-            );} ?>
+                    if($item->pass!=NULL){
+                      echo $this->tag->linkTo( 
+                        [
+                          '',
+                          " <div class='d-flex w-100 justify-content-between'>
+                          <h5 class='mb-1'>".$item->name."</h5>
+                          <smal>".$item->date."</smal>
+                          </div>
+                          <div class='d-flex w-100 justify-content-between'>
+                          <p class='mb-1'>".$item->description."</p>
+                          </div>",
+                          "class" => "room-btn list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
+                          'data-toggle' => 'modal',
+                          'data-target' => '#passRoom',
+                          'data-id' => $item->room_id,
+                        ]
+                      );}
+                  else{
+                      echo $this->tag->linkTo( 
+                        [
+                          "room/index/".$item->room_id,
+                          " <div class='d-flex w-100 justify-content-between'>
+                          <h5 class='mb-1'>".$item->name."</h5>
+                          <smal>".$item->date."</smal>
+                        </div>
+                        <div class='d-flex w-100 justify-content-between'>
+                          <p class='mb-1'>".$item->description."</p>
+                        </div>",
+                        "class" => "list-group-item list-group-item-action flex-column align-items-start btn-outline-primary",
+                        ]
+                      );} 
+                    }?>
           </div>
         </div>
       </div>
@@ -135,8 +154,8 @@
         <div class="form-group">
           <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" onclick="change()" id="pass">Создать закрытую комнату</a>
           <div class="collapse multi-collapse" id="multiCollapseExample1">
-            <label for="passwordInput">Введите пароль</label>
-            <input type="text" name="password" class="form-control" id="passwordInput">
+            <label for="fieldPass">Введите пароль</label>
+            <?php echo $this->tag->textField(["password", "size" => 30, "type" => "password", "class" => "form-control my-2", "id" => "fieldPass"]) ?>
           </div>
         </div>
         <div class="form-group">
@@ -160,3 +179,46 @@
     else pass.innerText = "Создать закрытую комнату"
    }
   </script>
+
+<div class="modal fade" id="passRoom">
+  <div class="modal-dialog " role="document">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Введите пароль</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?echo Phalcon\Tag::form(
+            [
+                "room/check",
+                "method" => "post",
+                "class"=>"form-horizontal",
+            ]
+        );?>
+        <div class="form-group">
+            <label for="fieldPass">Введите пароль</label>
+            <?php echo $this->tag->textField(["password", "size" => 30, "type" => "password", "class" => "form-control my-2", "id" => "fieldPass"]) ?>
+          </div>
+        </div>
+         <?php echo $this->tag->hiddenField(["room_id","id"=>"hiddenId"]) ?>
+        <div class="form-group">
+          <button type="submit" style="width:100%" class="btn btn-outline-primary">Войти</button>
+        </div>
+        </form>
+      </div>
+      
+    </div><!-- /.модальное окно-Содержание -->
+
+  </div><!-- /.модальное окно-диалог -->
+</div>
+
+
+<script>
+$(".room-btn").click(function(event){
+  let id=$(this).data('id');
+  $('#hiddenId').val(id);
+});
+</script>

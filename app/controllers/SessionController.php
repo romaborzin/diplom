@@ -25,7 +25,7 @@ class SessionController extends \Phalcon\Mvc\Controller
                 [
                     'controller' => 'index',
                     'action'     => 'index',
-                    'params' => [error=>'Пожалйста, не хакайте нас. Оч просим.'],
+                    'params' => [error=>'Заполните поля'],
                 ]
             );;
         }
