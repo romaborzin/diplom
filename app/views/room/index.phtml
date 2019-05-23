@@ -77,19 +77,22 @@
                 
             </div>
         </div>
-        <div class="col-md-6">
-          <div style="text-align: center">
-            <video id="video" width="400" height="300" autoplay></video>
-          </div>
+        <div class="col-md-6" >
+          <center>
+            <video id="localVideo" autoplay muted width="400" height="300"></video>
+            <video id="remoteVideo" autoplay width="400" height="300"></video>
+          </center>
         </div>
         <div class="col-md-3">
           <h3>Список выступающих</h3>
           <ul class="list-group list-group-flush" style="max-height: 50vh; overflow: auto;">
             
               <? 
+              $us_id = array();
 
               foreach ($room->getUser(['conditions' => 'room_room_id = '.$room->room_id.' and role = "speaker"']) as $item){
-                 $username = $item->second_name . ' ' . $item->name;
+                $username = $item->second_name . ' ' . $item->name;
+                array_push($us_id, $item->user_id);
                 ?>
               <li class="list-group-item">
                 <?
@@ -120,27 +123,131 @@
     </div>
   </div>
   
-<!--  <script>
-  var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
+<script type="text/javascript">
+var roomHash = '<? echo $room->room_id?>';
+// TODO: Replace with your own channel ID
+const drone = new ScaleDrone('yiS12Ts5RdNhebyM');
+// Room name needs to be prefixed with 'observable-'
+const roomName = 'observable-' + roomHash;
+const configuration = {
+  iceServers: [{
+    urls: 'stun:stun.l.google.com:19302'
+  }]
+};
+let room;
+let pc;
 
-navigator.mediaDevices.getUserMedia(constraints)
-.then(function(mediaStream) {
-  var video = document.querySelector('video');
-  video.srcObject = mediaStream;
-  video.onloadedmetadata = function(e) {
-    video.play();
+
+function onSuccess() {};
+function onError(error) {
+  console.error(error);
+};
+
+drone.on('open', error => {
+  if (error) {
+    return console.error(error);
+  }
+  room = drone.subscribe(roomName);
+  room.on('open', error => {
+    if (error) {
+      onError(error);
+    }
+  });
+  // We're connected to the room and received an array of 'members'
+  // connected to the room (including us). Signaling server is ready.
+  room.on('members', members => {
+    console.log('MEMBERS', members);
+    // If we are the second user to connect to the room we will be creating the offer
+    const isOfferer = members.length === 2;
+    startWebRTC(isOfferer);
+  });
+});
+
+// Send signaling data via Scaledrone
+function sendMessage(message) {
+  drone.publish({
+    room: roomName,
+    message
+  });
+}
+
+function startWebRTC(isOfferer) {
+  pc = new RTCPeerConnection(configuration);
+
+  // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
+  // message to the other peer through the signaling server
+  pc.onicecandidate = event => {
+    if (event.candidate) {
+      sendMessage({'candidate': event.candidate});
+    }
   };
-})
-.catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
-  </script>-->
+
+  // If user is offerer let the 'negotiationneeded' event create the offer
+  if (isOfferer) {
+    pc.onnegotiationneeded = () => {
+      pc.createOffer().then(localDescCreated).catch(onError);
+    }
+  }
+
+  // When a remote stream arrives display it in the #remoteVideo element
+  pc.ontrack = event => {
+    const stream = event.streams[0];
+    if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
+      remoteVideo.srcObject = stream;
+    }
+  };
+  
+  //if(in_array($this->session->get('auth')['id'], $us_id))
+  
+  navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true,
+  }).then(stream => {
+    // Display your local video in #localVideo element
+    localVideo.srcObject = stream;
+    // Add your stream to be sent to the conneting peer
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+  }, onError);
+  // Listen to signaling data from Scaledrone
+  room.on('data', (message, client) => {
+    // Message was sent by us
+    if (client.id === drone.clientId) {
+      return;
+    }
+
+    if (message.sdp) {
+      // This is called after receiving an offer or answer from another peer
+      pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
+        // When receiving an offer lets answer it
+        if (pc.remoteDescription.type === 'offer') {
+          pc.createAnswer().then(localDescCreated).catch(onError);
+        }
+      }, onError);
+    } else if (message.candidate) {
+      // Add the new ICE candidate to our connections remote description
+      pc.addIceCandidate(
+        new RTCIceCandidate(message.candidate), onSuccess, onError
+      );
+    }
+  });
+}
+
+function localDescCreated(desc) {
+  pc.setLocalDescription(
+    desc,
+    () => sendMessage({'sdp': pc.localDescription}),
+    onError
+  );
+}
+  </script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script language="javascript" type="text/javascript"> 
+<script type="text/javascript"> 
   var msgBox = $('#message-box');
   var wsUri = "ws://localhost:9001/demo/server.php";  
   var staticUri = "<? echo ($this->config->application->staticUri ?? '') ?>";  
-  var room = '<? echo $room->room_id?>';
+  var room1 = '<? echo $room->room_id?>';
   websocket = new WebSocket(wsUri); 
   
   var block = document.getElementById("message-box");
@@ -154,7 +261,7 @@ navigator.mediaDevices.getUserMedia(constraints)
     var user_name     = response.name; 
    var message_date    = response.date; 
    var room_id = response.room_id; 
-   if(room_id==room)
+   if(room_id==room1)
    if(user_message)
     switch(res_type){
        case 'usermsg':
