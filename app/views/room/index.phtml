@@ -21,6 +21,9 @@
                         "class" => "btn btn-primary",
                     ]
                 );
+                ?>
+                <button class="btn btn-primary" onclick="change()" id="start">Начать трансляцию</button>
+                <?
               }
               ?>
       </div>
@@ -101,7 +104,9 @@
               ?>
                 
 
-              </li><?}?>
+              </li><?}
+
+              ?>
            
           </ul>
         </div>
@@ -136,12 +141,15 @@ const configuration = {
 };
 let room;
 let pc;
-
-
-function onSuccess() {};
-function onError(error) {
-  console.error(error);
-};
+var flag=false;
+var mem;
+var me = <?echo $this->session->get('auth')['id']?>;
+var us = <?   echo "[";
+foreach($us_id as $item) {
+                  echo $item." ,";
+          }
+            echo "]";
+          ?>
 
 drone.on('open', error => {
   if (error) {
@@ -157,11 +165,26 @@ drone.on('open', error => {
   // connected to the room (including us). Signaling server is ready.
   room.on('members', members => {
     console.log('MEMBERS', members);
-    // If we are the second user to connect to the room we will be creating the offer
-    const isOfferer = members.length === 2;
+    // If we are the second user to connect to the room we will be creating the offer    
+    const isOfferer = members.length;
     startWebRTC(isOfferer);
   });
 });
+
+function change() {
+    if(start.innerText == "Начать трансляцию"){
+    start.innerText = "Сменить выступающего";
+    flag = true;
+    }
+   }
+
+
+function onSuccess() {};
+function onError(error) {
+  console.error(error);
+};
+
+
 
 // Send signaling data via Scaledrone
 function sendMessage(message) {
@@ -172,8 +195,9 @@ function sendMessage(message) {
 }
 
 function startWebRTC(isOfferer) {
-  pc = new RTCPeerConnection(configuration);
-
+  
+      pc = new RTCPeerConnection(configuration);
+      
   // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
   // message to the other peer through the signaling server
   pc.onicecandidate = event => {
@@ -198,7 +222,8 @@ function startWebRTC(isOfferer) {
   };
   
   //if(in_array($this->session->get('auth')['id'], $us_id))
-  
+  //for (var i = 0; i < us.length; ++i) {
+    //if(me==us[i]){
   navigator.mediaDevices.getUserMedia({
     audio: true,
     video: true,
@@ -208,6 +233,9 @@ function startWebRTC(isOfferer) {
     // Add your stream to be sent to the conneting peer
     stream.getTracks().forEach(track => pc.addTrack(track, stream));
   }, onError);
+ // }
+  //}
+
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
     // Message was sent by us
@@ -245,7 +273,7 @@ function localDescCreated(desc) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript"> 
   var msgBox = $('#message-box');
-  var wsUri = "ws://localhost:9001/demo/server.php";  
+  var wsUri = "ws://localhost:9001/server.php";  
   var staticUri = "<? echo ($this->config->application->staticUri ?? '') ?>";  
   var room1 = '<? echo $room->room_id?>';
   websocket = new WebSocket(wsUri); 
